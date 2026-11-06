@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wissenstest 2026 – Schläuche, Armaturen & Leinen</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧯</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;700&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rot:#B3261E; --rot-dunkel:#8A1C16; --gelb:#F2A900;
+  --navy:#1E2A44; --bg:#EDF1F5; --flaeche:#FFFFFF; --text:#1E2A44; --leise:#5B6578;
+  --linie:#CDD5DF; --ok:#1F7A4D; --ok-bg:#E3F3EA; --falsch-bg:#FBE7E5;
+  --kopf:"Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body:"Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --rot:#E5534B; --rot-dunkel:#C43E37; --gelb:#F5B82E;
+    --navy:#DCE3EE; --bg:#121826; --flaeche:#1C2436; --text:#E6EBF2; --leise:#9AA6BA;
+    --linie:#2F3A50; --ok:#4CC38A; --ok-bg:#163126; --falsch-bg:#3A1C1C;
+    color-scheme: dark;
+  }
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font:400 1.0625rem/1.55 var(--body)}
+main{max-width:680px;margin:0 auto;padding:1.5rem 1.25rem 3rem}
+h1,h2{font-family:var(--kopf);font-weight:700;line-height:1.1;margin:0}
+h1{font-size:clamp(2rem,6vw,2.75rem);color:var(--navy)}
+h2{font-size:1.5rem;color:var(--navy)}
+p{margin:.5rem 0}
+.leise{color:var(--leise)}
+
+/* Kopf: Schlauch mit Kupplung als Markenzeichen */
+.kopf{display:flex;align-items:center;gap:.9rem;margin-bottom:.5rem}
+.kupplung{flex:none;width:44px;height:44px;border-radius:50%;background:var(--rot);
+  box-shadow:inset 0 0 0 6px var(--rot-dunkel), inset 0 0 0 13px var(--gelb), inset 0 0 0 17px var(--rot-dunkel)}
+
+/* Fortschritt als Schlauchleitung: jede Frage ein Schlauchstück */
+.leitung{display:flex;gap:4px;margin:1.25rem 0 1.5rem;align-items:center}
+.stueck{flex:1;height:10px;border-radius:5px;background:var(--linie)}
+.stueck.richtig{background:var(--ok)} .stueck.falsch{background:var(--rot)}
+.stueck.aktuell{background:var(--gelb)}
+
+.karte{background:var(--flaeche);border:1px solid var(--linie);border-radius:14px;padding:1.5rem}
+.meta{font-family:var(--kopf);font-weight:500;color:var(--leise);font-size:1rem;margin-bottom:.4rem}
+.frage{font-family:var(--kopf);font-weight:700;font-size:1.45rem;line-height:1.2;margin:0 0 1.1rem}
+
+.optionen{display:grid;gap:.6rem}
+button{font:inherit;cursor:pointer}
+.opt{text-align:left;padding:.85rem 1rem;border:2px solid var(--linie);border-radius:10px;background:transparent;color:var(--text)}
+.opt:hover:not(:disabled){border-color:var(--navy)}
+.opt:disabled{cursor:default}
+.opt.richtig{border-color:var(--ok);background:var(--ok-bg)}
+.opt.falsch{border-color:var(--rot);background:var(--falsch-bg)}
+:focus-visible{outline:3px solid var(--gelb);outline-offset:2px}
+
+.erklaerung{margin-top:1rem;padding:.9rem 1rem;border-left:4px solid var(--ok);background:var(--ok-bg);border-radius:0 8px 8px 0}
+.erklaerung.f{border-color:var(--rot);background:var(--falsch-bg)}
+.erklaerung strong{display:block;font-family:var(--kopf);font-size:1.1rem}
+
+.aktion{margin-top:1.25rem;display:flex;gap:.75rem;flex-wrap:wrap}
+.btn{padding:.8rem 1.4rem;border-radius:10px;border:none;background:var(--rot);color:#fff;font-family:var(--kopf);font-weight:700;font-size:1.15rem}
+.btn:hover{background:var(--rot-dunkel)}
+.btn.zweit{background:transparent;color:var(--text);border:2px solid var(--linie)}
+
+fieldset{border:none;padding:0;margin:1.25rem 0 0}
+legend{font-family:var(--kopf);font-weight:700;font-size:1.15rem;margin-bottom:.5rem;color:var(--navy)}
+.wahl{display:flex;flex-wrap:wrap;gap:.5rem}
+.wahl label{position:relative}
+.wahl input{position:absolute;opacity:0}
+.wahl span{display:inline-block;padding:.5rem .9rem;border:2px solid var(--linie);border-radius:999px;cursor:pointer}
+.wahl input:checked+span{border-color:var(--rot);background:var(--rot);color:#fff}
+.wahl input:focus-visible+span{outline:3px solid var(--gelb);outline-offset:2px}
+
+.ergebnis{font-family:var(--kopf);font-weight:700;font-size:3.5rem;color:var(--rot);line-height:1}
+.fehlerliste{margin:1rem 0 0;padding:0;list-style:none}
+.fehlerliste li{padding:.75rem 0;border-top:1px solid var(--linie)}
+.fehlerliste b{display:block}
+footer{margin-top:2rem;font-size:.9rem;color:var(--leise)}
+footer a{color:inherit}
+@media (prefers-reduced-motion:no-preference){.stueck{transition:background .25s}}
+</style>
+</head>
+<body>
+<main>
+  <div class="kopf"><div class="kupplung" aria-hidden="true"></div>
+    <h1>Wissenstest 2026</h1></div>
+  <p class="leise">Umgang mit Schläuchen, Armaturen &amp; Leinen – Übungsfragen für die Jugendfeuerwehr</p>
+  <div id="app"></div>
+  <footer>
+    Inoffizielle Übungsfragen, keine Original-Prüfungsfragen. Grundlage sind die Unterlagen der
+    <a href="https://www.feuerwehr-lernbar.bayern/topics/umgang-mit-schlaeuchen-armaturen-und-leinen">Feuerwehr-Lernbar</a>.
+    Fehler gefunden? Bitte melden.
+  </footer>
+</main>
+
+<script>
+// Fragenkatalog: b = Bereich, s = Schwierigkeit (1 = Basis, 2 = Fortgeschritten), r = Index der richtigen Antwort
+const FRAGEN = [
+ // ---------- Schläuche ----------
+ {b:"Schläuche",s:1,f:"Welchen Durchmesser hat ein B-Druckschlauch?",o:["52 mm","75 mm","110 mm","25 mm"],r:1,e:"B = 75 mm. Zum Vergleich: C = 42 oder 52 mm, D = 25 mm, A-Saugschlauch = 110 mm."},
+ {b:"Schläuche",s:1,f:"Welchen Durchmesser hat ein D-Druckschlauch?",o:["25 mm","42 mm","52 mm","75 mm"],r:0,e:"D-Schläuche haben 25 mm und werden z. B. für Kleinlöschgeräte genutzt."},
+ {b:"Schläuche",s:1,f:"Welche Durchmesser gibt es beim C-Druckschlauch?",o:["25 und 42 mm","42 und 52 mm","52 und 75 mm","75 und 110 mm"],r:1,e:"C-Schläuche gibt es als C 42 und C 52."},
+ {b:"Schläuche",s:1,f:"Welchen Durchmesser hat ein A-Saugschlauch?",o:["75 mm","90 mm","110 mm","150 mm"],r:2,e:"Der A-Saugschlauch hat 110 mm Durchmesser."},
+ {b:"Schläuche",s:1,f:"Wie lang ist ein B-Druckschlauch üblicherweise?",o:["5 m","15 m","20 m","50 m"],r:2,e:"Die übliche Länge eines B-Schlauchs ist 20 m."},
+ {b:"Schläuche",s:1,f:"Wie lang ist ein C-Druckschlauch üblicherweise?",o:["5 m","15 m","35 m","50 m"],r:1,e:"C-Schläuche sind üblicherweise 15 m lang."},
+ {b:"Schläuche",s:1,f:"Wie werden trockene, saubere Schläuche gelagert?",o:["Einfach gerollt","Doppelt gerollt","Gefaltet","Lose aufgehängt"],r:1,e:"Trocken und sauber: doppelt gerollt."},
+ {b:"Schläuche",s:1,f:"Wie werden nasse oder verschmutzte Schläuche nach dem Einsatz gerollt?",o:["Doppelt gerollt","Einfach gerollt","In Buchten gelegt","Gar nicht"],r:1,e:"Nasse oder schmutzige Schläuche werden einfach gerollt."},
+ {b:"Schläuche",s:1,f:"Wie sind Schläuche zu verlegen?",o:["In engen Schlaufen","Knick- und drallfrei, möglichst geradlinig","Mit einer Drehung pro Schlauchlänge","Immer gespannt"],r:1,e:"Knicke und Drall erhöhen den Reibungsverlust und können den Schlauch beschädigen."},
+ {b:"Schläuche",s:1,f:"Wie viele Personen kuppeln B-Druckschläuche?",o:["Eine","Grundsätzlich zwei","Der Maschinist allein","Drei"],r:1,e:"B-Druckschläuche werden grundsätzlich von zwei Feuerwehrdienstleistenden gekuppelt, ggf. mit Kupplungsschlüssel."},
+ {b:"Schläuche",s:1,f:"Wer kuppelt in der Jugendfeuerwehr C-Schläuche?",o:["Immer zwei Personen","Eine Person reicht","Nur der Ausbilder","Niemand, sie bleiben gekuppelt"],r:0,e:"In der Jugendfeuerwehr werden auch C-Schläuche immer von zwei Personen gekuppelt."},
+ {b:"Schläuche",s:1,f:"Wo fasst man einen Druckschlauch beim Kuppeln an?",o:["In der Schlauchmitte","Unmittelbar hinter der Kupplung","An der Kupplungsklaue","Am Schlauchende ohne Kupplung"],r:1,e:"Den Schlauch unmittelbar hinter der Kupplung fassen."},
+ {b:"Schläuche",s:1,f:"Was setzt man ein, wenn eine Schlauchleitung über eine befahrene Straße führt?",o:["Schlauchbrücke","Übergangsstück","Schlauchhalter","Kugelhahn"],r:0,e:"Schlauchbrücken schützen die Leitung vor dem Überfahren."},
+ {b:"Schläuche",s:2,f:"Warum ist ein Saugschlauch formstabil gebaut?",o:["Damit er leichter ist","Damit er beim Ansaugen durch den Unterdruck nicht zusammengedrückt wird","Damit er sich besser rollen lässt","Damit er schwimmt"],r:1,e:"Beim Ansaugen entsteht Unterdruck. Ein Druckschlauch würde zusammenfallen."},
+ {b:"Schläuche",s:2,f:"Welche Kupplung ist bei der Feuerwehr in Deutschland üblich?",o:["Storz-Kupplung","Bajonettkupplung","Gewindekupplung","Klemmkupplung"],r:0,e:"Die Storz-Kupplung ist symmetrisch: Es gibt kein Vater- und Mutterteil."},
+ {b:"Schläuche",s:2,f:"Wozu dient eine Schlauchreserve?",o:["Als Ersatz für defekte Schläuche im Fahrzeug","Damit der Trupp vorgehen kann, ohne die Leitung nachziehen zu müssen","Zum Abdichten von Kupplungen","Zum Transport von Leinen"],r:1,e:"Die Schlauchreserve (z. B. aus C-Rollschlauch oder Schlauchtragekorb) gibt dem vorgehenden Trupp Bewegungsfreiheit."},
+ {b:"Schläuche",s:2,f:"Wozu dient ein Schlauchhalter?",o:["Zum Abfangen des Gewichts senkrecht verlegter Schlauchleitungen","Zum Absperren der Leitung","Zum Kuppeln unterschiedlicher Größen","Zum Aufrollen"],r:0,e:"Schlauchhalter sichern senkrecht verlegte Leitungen, z. B. an Leitern oder Fenstern."},
+
+ // ---------- Armaturen ----------
+ {b:"Armaturen",s:1,f:"Welche Anschlüsse hat ein Verteiler?",o:["Ein B-Eingang, Abgänge C, B, C","Zwei B-Eingänge, ein A-Ausgang","Ein C-Eingang, zwei D-Abgänge","Ein A-Eingang, zwei B-Abgänge"],r:0,e:"Verteiler B-CBC: B-Eingang und drei absperrbare Abgänge."},
+ {b:"Armaturen",s:1,f:"Was macht ein Sammelstück?",o:["Teilt eine B-Leitung in C-Leitungen","Führt zwei B-Leitungen in einen A-Anschluss zusammen","Verbindet zwei unterschiedlich große Kupplungen","Verhindert Rückfluss"],r:1,e:"Das Sammelstück A-2B führt zwei B-Leitungen in den A-Eingang der Pumpe."},
+ {b:"Armaturen",s:1,f:"Welches Gerät verbindet Kupplungen unterschiedlicher Größe?",o:["Kupplungsschlüssel","Übergangsstück","Schlauchbrücke","Verteiler"],r:1,e:"Übergangsstücke, z. B. B-C oder A-B, verbinden verschiedene Kupplungsgrößen."},
+ {b:"Armaturen",s:1,f:"Wofür braucht man ein Standrohr?",o:["Zum Ansaugen aus offenen Gewässern","Zur Wasserentnahme aus einem Unterflurhydranten","Als Halterung für das Strahlrohr","Zum Zusammenführen zweier Leitungen"],r:1,e:"Das Standrohr wird auf den Unterflurhydranten gesetzt."},
+ {b:"Armaturen",s:1,f:"Womit wird ein Unterflurhydrant geöffnet?",o:["Kupplungsschlüssel","Unterflurhydrantenschlüssel","Überflurhydrantenschlüssel","Von Hand am Standrohr"],r:1,e:"Der Unterflurhydrant wird mit dem Unterflurhydrantenschlüssel geöffnet."},
+ {b:"Armaturen",s:1,f:"Womit wird ein Überflurhydrant geöffnet?",o:["Überflurhydrantenschlüssel","Unterflurhydrantenschlüssel","Standrohr","Kupplungsschlüssel"],r:0,e:"Für Überflurhydranten gibt es einen eigenen Überflurhydrantenschlüssel."},
+ {b:"Armaturen",s:1,f:"Wozu dient der Kupplungsschlüssel?",o:["Zum Öffnen von Hydranten","Zum Kuppeln und Lösen von Storz-Kupplungen","Zum Absperren des Strahlrohrs","Zum Spülen des Standrohrs"],r:1,e:"Mit dem Kupplungsschlüssel lassen sich festsitzende Kupplungen kuppeln und lösen."},
+ {b:"Armaturen",s:2,f:"Warum wird ein Unterflurhydrant vor dem Anschließen der Schläuche gespült?",o:["Damit das Wasser wärmer wird","Um Schmutz und Steine auszuspülen, die sonst Pumpe und Armaturen beschädigen","Um den Druck zu erhöhen","Das ist nicht nötig"],r:1,e:"Im Hydranten können sich Sand und Steine sammeln. Diese werden vorher ausgespült."},
+ {b:"Armaturen",s:2,f:"Was verhindert ein Systemtrenner?",o:["Dass der Schlauch platzt","Dass Löschwasser ins Trinkwassernetz zurückfließt","Dass die Pumpe Luft zieht","Dass der Hydrant einfriert"],r:1,e:"Der Systemtrenner schützt das Trinkwassernetz vor Verunreinigung."},
+ {b:"Armaturen",s:2,f:"Wo wird der Systemtrenner beim Aufbau der Wasserversorgung angekuppelt?",o:["Am Verteiler","Am Hydranten bzw. Standrohr","Am Strahlrohr","Am Sammelstück der Pumpe"],r:1,e:"Er kommt direkt an die Entnahmestelle, danach folgen die B-Schläuche zur Pumpe."},
+ {b:"Armaturen",s:2,f:"Welche Information muss der Maschinist beim Aufbau der Wasserversorgung bekommen?",o:["Wie viele Schläuche noch im Fahrzeug sind","Woher das Löschwasser kommt","Wer den Hydranten geöffnet hat","Wie spät es ist"],r:1,e:"Der Maschinist muss wissen, woher das Löschwasser kommt."},
+ {b:"Armaturen",s:2,f:"Warum öffnet und schließt man ein Strahlrohr langsam?",o:["Um Wasser zu sparen","Um Druckstöße in der Leitung zu vermeiden","Damit es leiser ist","Wegen des Gewichts"],r:1,e:"Schnelles Schließen erzeugt Druckstöße, die Schläuche und Pumpe beschädigen können."},
+ {b:"Armaturen",s:2,f:"Wozu dient der Saugschutzkorb?",o:["Er hält grobe Verunreinigungen von der Saugleitung fern","Er erhöht den Wasserdruck","Er verbindet zwei Saugschläuche","Er dient zum Spülen"],r:0,e:"Der Saugschutzkorb schützt die Saugleitung vor Schlamm, Steinen und Pflanzenresten."},
+ {b:"Armaturen",s:2,f:"Was lässt sich an einem Hohlstrahlrohr typischerweise einstellen?",o:["Nur auf/zu","Durchflussmenge und Strahlbild (Vollstrahl bis Sprühstrahl)","Nur die Farbe des Wassers","Der Pumpendruck"],r:1,e:"Beim Hohlstrahlrohr kann man Durchflussmenge und Strahlform einstellen."},
+
+ // ---------- Leinen ----------
+ {b:"Leinen",s:1,f:"Welcher Knoten verbindet zwei gleich starke Leinen?",o:["Mastwurf","Zimmermannsschlag","Kreuzknoten","Halbschlag"],r:2,e:"Kreuzknoten für gleich starke Leinen."},
+ {b:"Leinen",s:1,f:"Welcher Stich verbindet zwei ungleich starke Leinen?",o:["Kreuzknoten","Schotenstich","Mastwurf","Halbschlag"],r:1,e:"Beim Schotenstich wird mit der dickeren Leine eine U-förmige Schlaufe gelegt."},
+ {b:"Leinen",s:1,f:"Wie wird ein Strahlrohr zum Hochziehen angeschlagen?",o:["Mastwurf mit Halbschlag","Kreuzknoten","Schotenstich","Nur ein Halbschlag"],r:0,e:"Mastwurf zum Anschlagen, Halbschlag zur Führung und Sicherung."},
+ {b:"Leinen",s:1,f:"Wofür wird der Zimmermannsschlag verwendet?",o:["Zum Verbinden zweier Leinen","Zum Anschlagen und Ziehen von Rundhölzern und Geräten","Zum Sichern von Personen","Zum Aufrollen der Leine"],r:1,e:"Der Zimmermannsschlag zieht sich unter Last fest und lässt sich danach leicht lösen."},
+ {b:"Leinen",s:1,f:"Wie lang ist eine Feuerwehrleine nach DIN?",o:["10 m","20 m","30 m","50 m"],r:2,e:"Die Feuerwehrleine ist 30 m lang."},
+ {b:"Leinen",s:1,f:"Was ist nach dem Einsatz mit Leinen zu tun?",o:["Sofort nass verlasten","Sichtprüfung durchführen und Beschädigungen dem Ausbilder melden","Wegwerfen","Mit Öl einreiben"],r:1,e:"Alle eingesetzten Geräte werden auf Beschädigungen geprüft, Schäden werden gemeldet."},
+ {b:"Leinen",s:1,f:"Wie werden nasse Leinen getrocknet?",o:["Auf der Heizung","In der prallen Sonne","Locker an der Luft, ohne direkte Hitze","Im Trockner"],r:2,e:"Hitze und UV-Licht schädigen die Fasern. Leinen locker und luftig trocknen."},
+ {b:"Leinen",s:2,f:"Wozu dient die Ventilleine?",o:["Zum Sichern von Personen","Zum Öffnen des Rückschlagventils am Saugkorb und Halten der Saugleitung","Zum Absperren","Zum Hochziehen von Leitern"],r:1,e:"Die Ventilleine wird am Saugkorb angeschlagen."},
+ {b:"Leinen",s:2,f:"Wozu dient ein Halbschlag?",o:["Als eigenständiger Halteknoten für schwere Lasten","Zur Sicherung bzw. Führung eines anderen Knotens oder des angeschlagenen Geräts","Zum Verbinden zweier Leinen","Zum Kürzen einer Leine"],r:1,e:"Der Halbschlag ergänzt z. B. den Mastwurf und verhindert das Abkippen des Geräts."},
+ {b:"Leinen",s:2,f:"Warum darf eine beschädigte Leine nicht weiter verwendet werden?",o:["Sie sieht unordentlich aus","Ihre Tragfähigkeit ist nicht mehr sicher gewährleistet","Sie ist zu kurz","Sie ist zu schwer"],r:1,e:"Beschädigte Leinen können unter Last reißen."}
+];
+
+const app = document.getElementById("app");
+let runde = [], pos = 0, punkte = 0, ergebnisse = [];
+
+function mischen(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function esc(t){const d=document.createElement("div");d.textContent=t;return d.innerHTML}
+
+function start(){
+  app.innerHTML = `
+  <div class="karte">
+    <h2>Übung zusammenstellen</h2>
+    <p class="leise">${FRAGEN.length} Fragen im Katalog. Reihenfolge und Antworten werden jedes Mal neu gemischt.</p>
+    <fieldset><legend>Bereich</legend><div class="wahl">
+      ${["Alle","Schläuche","Armaturen","Leinen"].map((b,i)=>`<label><input type="radio" name="b" value="${b}" ${i?"":"checked"}><span>${b}</span></label>`).join("")}
+    </div></fieldset>
+    <fieldset><legend>Schwierigkeit</legend><div class="wahl">
+      <label><input type="radio" name="s" value="0" checked><span>Alle</span></label>
+      <label><input type="radio" name="s" value="1"><span>Basis</span></label>
+      <label><input type="radio" name="s" value="2"><span>Fortgeschritten</span></label>
+    </div></fieldset>
+    <fieldset><legend>Anzahl</legend><div class="wahl">
+      ${["10","20","Alle"].map((n,i)=>`<label><input type="radio" name="n" value="${n}" ${i?"":"checked"}><span>${n}</span></label>`).join("")}
+    </div></fieldset>
+    <div class="aktion"><button class="btn" id="los">Übung starten</button></div>
+  </div>`;
+  document.getElementById("los").onclick = () => {
+    const b = app.querySelector("[name=b]:checked").value;
+    const s = +app.querySelector("[name=s]:checked").value;
+    const n = app.querySelector("[name=n]:checked").value;
+    let pool = FRAGEN.filter(q => (b==="Alle"||q.b===b) && (!s||q.s===s));
+    pool = mischen(pool);
+    if(n!=="Alle") pool = pool.slice(0, +n);
+    runde = pool.map(q => { const idx = mischen(q.o.map((_,i)=>i)); return {...q, o: idx.map(i=>q.o[i]), r: idx.indexOf(q.r)}; });
+    pos = 0; punkte = 0; ergebnisse = [];
+    frage();
+  };
+}
+
+function leitung(){
+  return `<div class="leitung" aria-label="Fortschritt: Frage ${pos+1} von ${runde.length}">` +
+    runde.map((_,i)=>`<div class="stueck ${ergebnisse[i]===true?"richtig":ergebnisse[i]===false?"falsch":i===pos?"aktuell":""}"></div>`).join("") + `</div>`;
+}
+
+function frage(){
+  const q = runde[pos];
+  app.innerHTML = leitung() + `
+  <div class="karte">
+    <div class="meta">Frage ${pos+1} von ${runde.length} · ${q.b}</div>
+    <p class="frage">${esc(q.f)}</p>
+    <div class="optionen">${q.o.map((o,i)=>`<button class="opt" data-i="${i}">${esc(o)}</button>`).join("")}</div>
+    <div id="fb"></div>
+  </div>`;
+  app.querySelectorAll(".opt").forEach(b => b.onclick = () => antwort(+b.dataset.i));
+  app.querySelector(".opt").focus();
+}
+
+function antwort(i){
+  const q = runde[pos], ok = i===q.r;
+  ergebnisse[pos] = ok; if(ok) punkte++;
+  app.querySelectorAll(".opt").forEach((b,j)=>{ b.disabled = true;
+    if(j===q.r) b.classList.add("richtig"); else if(j===i) b.classList.add("falsch"); });
+  const letzte = pos===runde.length-1;
+  document.getElementById("fb").innerHTML = `
+    <div class="erklaerung ${ok?"":"f"}"><strong>${ok?"Richtig.":"Leider falsch."}</strong>${esc(q.e)}</div>
+    <div class="aktion"><button class="btn" id="weiter">${letzte?"Ergebnis anzeigen":"Nächste Frage"}</button></div>`;
+  app.querySelector(".leitung").outerHTML = leitung();
+  const w = document.getElementById("weiter");
+  w.focus();
+  w.onclick = () => { if(letzte) ende(); else { pos++; frage(); } };
+}
+
+function ende(){
+  const quote = Math.round(punkte/runde.length*100);
+  const falsch = runde.filter((_,i)=>!ergebnisse[i]);
+  app.innerHTML = leitung() + `
+  <div class="karte">
+    <div class="ergebnis">${punkte} / ${runde.length}</div>
+    <p>${quote}&nbsp;% richtig. ${quote>=60?"Ziel von 60 % erreicht.":"Noch nicht bei 60 %. Schau dir die Fehler unten an und versuch es nochmal."}</p>
+    ${falsch.length?`<h2 style="margin-top:1.25rem">Zum Wiederholen</h2><ul class="fehlerliste">${falsch.map(q=>`<li><b>${esc(q.f)}</b>${esc(q.o[q.r])}</li>`).join("")}</ul>`:""}
+    <div class="aktion"><button class="btn" id="neu">Neue Übung</button></div>
+  </div>`;
+  document.getElementById("neu").onclick = start;
+}
+
+start();
+</script>
+</body>
+</html>
